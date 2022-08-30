@@ -16,8 +16,7 @@
   -->
 
 <manifest package="com.example.background"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -41,10 +40,9 @@
         </activity>
 
         <activity android:name=".BlurActivity" />
-
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
+            android:authorities="com.example.background.workmanager-init"
             tools:node="remove" />
     </application>
 
