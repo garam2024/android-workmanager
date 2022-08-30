@@ -29,7 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import com.example.background.databinding.ActivitySelectBinding
 import java.util.Arrays
-import timber.log.Timber
+
 
 class SelectImageActivity : AppCompatActivity() {
 
@@ -133,10 +133,8 @@ class SelectImageActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_CODE_IMAGE -> data?.let { handleImageRequestResult(data) }
-                else -> Timber.d("Unknown request code.")
+
             }
-        } else {
-            Timber.e(String.format("Unexpected Result code %s", resultCode))
         }
     }
 
@@ -147,7 +145,7 @@ class SelectImageActivity : AppCompatActivity() {
         } ?: intent.data
 
         if (imageUri == null) {
-            Timber.e("Invalid input image Uri.")
+
             return
         }
 

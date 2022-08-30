@@ -21,7 +21,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.background.OUTPUT_PATH
 import java.io.File
-import timber.log.Timber
+
 
 /**
  * Cleans up temporary files generated during blurring process
@@ -43,14 +43,14 @@ class CleanupWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params
                         val name = entry.name
                         if (name.isNotEmpty() && name.endsWith(".png")) {
                             val deleted = entry.delete()
-                            Timber.i("Deleted $name - $deleted")
+
                         }
                     }
                 }
             }
             Result.success()
         } catch (exception: Exception) {
-            Timber.e(exception)
+
             Result.failure()
         }
     }

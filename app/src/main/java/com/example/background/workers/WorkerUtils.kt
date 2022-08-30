@@ -39,7 +39,7 @@ import com.example.background.OUTPUT_PATH
 import com.example.background.R
 import com.example.background.VERBOSE_NOTIFICATION_CHANNEL_DESCRIPTION
 import com.example.background.VERBOSE_NOTIFICATION_CHANNEL_NAME
-import timber.log.Timber
+
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -93,7 +93,7 @@ fun sleep() {
     try {
         Thread.sleep(DELAY_TIME_MILLIS, 0)
     } catch (e: InterruptedException) {
-        Timber.e(e.message)
+
     }
 
 }
