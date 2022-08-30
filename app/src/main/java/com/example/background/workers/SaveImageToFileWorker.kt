@@ -44,7 +44,7 @@ class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : Worker(ctx
         // Makes a notification when the work starts and slows down the work so that
         // it's easier to see each WorkRequest start, even on emulated devices
         makeStatusNotification("Saving image", applicationContext)
-        sleep()
+       // sleep()
 
         val resolver = applicationContext.contentResolver
         return try {
