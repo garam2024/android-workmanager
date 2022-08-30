@@ -26,7 +26,7 @@ import androidx.work.workDataOf
 import com.example.background.KEY_IMAGE_URI
 import com.example.background.data.BlurredImage
 import com.example.background.data.ImagesDatabase
-import timber.log.Timber
+
 
 class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
 
@@ -37,7 +37,7 @@ class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
 
         return try {
             if (resourceUri.isNullOrEmpty()) {
-                Timber.e("Invalid input uri")
+
                 throw IllegalArgumentException("Invalid input uri")
             }
 
@@ -45,7 +45,7 @@ class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
             recordImageSaved(resourceUri)
             Result.success(outputData)
         } catch (throwable: Throwable) {
-            Timber.e(throwable, "Error applying blur")
+
             Result.failure()
         }
     }

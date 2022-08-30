@@ -27,7 +27,7 @@ import com.example.background.KEY_IMAGE_URI
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import timber.log.Timber
+
 
 /**
  * Saves the image to a permanent file
@@ -58,11 +58,11 @@ class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : Worker(ctx
 
                 Result.success(output)
             } else {
-                Timber.e("Writing to MediaStore failed")
+
                 Result.failure()
             }
         } catch (exception: Exception) {
-            Timber.e(exception)
+
             Result.failure()
         }
     }
