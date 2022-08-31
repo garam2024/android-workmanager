@@ -55,6 +55,8 @@ import java.util.UUID
  * @param message Message shown on the notification
  * @param context Context needed to create Toast
  */
+
+//WorkerUtils: 이 클래스에는 실제로 이미지를 블러 처리하는 코드와 나중에 Notifications를 표시하고, 비트맵을 파일에 저장하고, 앱 속도를 느리게 하는 데 사용하는 몇 가지 편의 메서드가 있습니다.
 fun makeStatusNotification(message: String, context: Context) {
 
     // Make a channel if necessary

@@ -25,7 +25,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.work.WorkInfo
 import com.bumptech.glide.Glide
 import com.example.background.databinding.ActivityBlurBinding
-
+//BlurActivity:* 이미지를 표시하고 흐림 수준을 선택하는 라디오 버튼이 포함된 활동입니다.
 class BlurActivity : AppCompatActivity() {
 
     private lateinit var viewModel: BlurViewModel
@@ -61,7 +61,7 @@ class BlurActivity : AppCompatActivity() {
         // Hookup the Cancel button
         binding.cancelButton.setOnClickListener { viewModel.cancelWork() }
 
-        viewModel.outputWorkInfos.observe(this, workInfosObserver())
+        viewModel.outputWorkInfo.observe(this, workInfosObserver())
     }
 
     private fun workInfosObserver(): Observer<List<WorkInfo>> {

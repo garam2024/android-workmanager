@@ -21,7 +21,6 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.work.Constraints
-import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
@@ -32,17 +31,17 @@ import com.example.background.workers.BlurWorker
 import com.example.background.workers.CleanupWorker
 import com.example.background.workers.SaveImageToFileWorker
 
+//BlurViewModel:* 이 뷰 모델은 BlurActivity를 표시하는 데 필요한 데이터를 모두 저장합니다. WorkManager를 사용하여 백그라운드 작업을 시작하는 클래스이기도 합니다.
 class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
     internal var imageUri: Uri? = null
     internal var outputUri: Uri? = null
     private val workManager = WorkManager.getInstance(application)
-    internal val outputWorkInfos: LiveData<List<WorkInfo>>
+    internal val outputWorkInfo: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
 
     init {
         // This transformation makes sure that whenever the current work Id changes the WorkInfo
         // the UI is listening to changes
-        outputWorkInfos = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
     }
 
     internal fun cancelWork() {

@@ -15,7 +15,7 @@
  */
 
 @file:JvmName("Constants")
-
+//Constants: Codelab에서 사용할 상수가 포함된 정적 클래스입니다.
 package com.example.background
 
 // Notification Channel constants
