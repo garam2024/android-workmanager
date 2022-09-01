@@ -23,9 +23,12 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.example.background.DELAY_TIME_MILLIS
 import com.example.background.KEY_IMAGE_URI
+import com.example.background.PROGRESS
 import com.example.background.data.BlurredImage
 import com.example.background.data.ImagesDatabase
+import kotlinx.coroutines.delay
 
 //백그라운드에서 실행시키고 싶은 기능 : 이미지 블러처리하기 -> Worker 클래스를 상속받고 실제작업 코드 입력
 //workmanager 인스턴스를 만들기 위한 파라미터들을 넣어준다
@@ -39,14 +42,34 @@ class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
         //작업알림을 줍니다? 몇초?
         makeStatusNotification("Blurring image", applicationContext)
 
+     /*   (0..100 step 10).forEach {
+            setProgressAsync(workDataOf(PROGRESS to it))
+            sleep()
+        }*/
+
+   /*     val firstUpdate = workDataOf(PROGRESS to 0)
+        val lastUpdate = workDataOf(PROGRESS to 100)
+        setProgress(firstUpdate)
+        delay(DELAY_TIME_MILLIS)
+        setProgress(lastUpdate)*/
+        //지연1 : 블러 하기 전에 프로세스 시간 지연
+        (0..100 step 1).forEach{
+            setProgress(workDataOf(PROGRESS to it))
+        //    sleep()
+            delay(1)
+        }
+
+
         return try {
             //인자전달여부
             if (resourceUri.isNullOrEmpty()) {
                 throw IllegalArgumentException("Invalid input uri")
             }
+
             val outputData = blurAndWriteImageToFile(resourceUri)
             recordImageSaved(resourceUri)
             //성공 결과는 Data 클래스를 통해 반환
+
             Result.success(outputData)
         } catch (throwable: Throwable) {
 

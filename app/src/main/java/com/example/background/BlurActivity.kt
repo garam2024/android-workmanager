@@ -64,6 +64,7 @@ class BlurActivity : AppCompatActivity() {
         binding.cancelButton.setOnClickListener { viewModel.cancelWork() }
 
         viewModel.outputWorkInfos.observe(this, workInfosObserver())
+        viewModel.progressWorkInfoItems.observe(this, progressObserver())
     }//LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
     //workmanager 가 주는
 
@@ -99,6 +100,22 @@ class BlurActivity : AppCompatActivity() {
                 //계속 상태를 검사하고 있다가 성공이 뜨면 if로
                 showWorkInProgress()
             }
+        }
+    }
+
+    private fun progressObserver(): Observer<List<WorkInfo>> {
+        return Observer { listOfWorkInfo ->
+            if (listOfWorkInfo.isNullOrEmpty()) {
+                return@Observer
+            }
+
+            listOfWorkInfo.forEach { workInfo ->
+                if (WorkInfo.State.RUNNING == workInfo.state) {
+                    val progress = workInfo.progress.getInt(PROGRESS, 0)
+                    binding.progressBar.progress = progress
+                }
+            }
+
         }
     }
 

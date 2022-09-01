@@ -38,7 +38,7 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
     internal var outputUri: Uri? = null
     private val workManager = WorkManager.getInstance(application)//뷰모델에서 workmanager 객체 생성
     internal val outputWorkInfos: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT) //작업목록중에서 특정 태그의 일을 관찰한다
-
+    internal val progressWorkInfoItems: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_PROGRESS) //진행률 감시
     init {
         // This transformation makes sure that whenever the current work Id changes the WorkInfo
         // the UI is listening to changes

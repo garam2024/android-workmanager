@@ -33,6 +33,7 @@ class CleanupWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params
         // Makes a notification when the work starts and slows down the work so that
         // it's easier to see each WorkRequest start, even on emulated devices
         makeStatusNotification("Cleaning up old temporary files", applicationContext)
+        //지연2 - 임시파일 정리하기전에 지연 한번
         sleep()
 
         return try {
