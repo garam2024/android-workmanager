@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.work.CoroutineWorker
 import androidx.work.workDataOf
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -40,7 +41,7 @@ class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : Worker(ctx
             Locale.getDefault()
     )
 
-    override fun doWork(): Result {
+    override  fun doWork(): Result {
         // Makes a notification when the work starts and slows down the work so that
         // it's easier to see each WorkRequest start, even on emulated devices
         makeStatusNotification("Saving image", applicationContext)
