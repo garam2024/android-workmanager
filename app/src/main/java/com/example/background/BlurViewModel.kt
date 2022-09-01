@@ -78,7 +78,7 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
                 //입력데이터를 작업에 추가 한다
                 blurBuilder.setInputData(data)
             }
-
+            blurBuilder.addTag(TAG_PROGRESS)
             continuation = continuation.then(blurBuilder.build()) //then - 후자가 적용 되도록 클린워커 -> 블러워커로 교체
         }
 

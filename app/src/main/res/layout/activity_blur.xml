@@ -90,8 +90,8 @@
                     android:text="@string/cancel_work"
                     android:visibility="gone"
                     />
-
-                <ProgressBar
+<!--원래 프로그레스 바
+   <ProgressBar
                     android:id="@+id/progress_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -99,6 +99,19 @@
                     android:visibility="gone"
                     android:layout_gravity="center_horizontal"
                     />
+-->
+                <!--바꾼 프로그레스바-->
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:progress="0"
+                    android:visibility="gone"
+                    android:layout_gravity="center_horizontal"
+                    />
+
             </LinearLayout>
 
             <Button
