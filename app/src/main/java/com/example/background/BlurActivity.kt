@@ -37,14 +37,16 @@ class BlurActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Get the ViewModel
-        viewModel = ViewModelProviders.of(this).get(BlurViewModel::class.java)
+        viewModel = ViewModelProviders.of(this)[BlurViewModel::class.java]
 
         // Image uri should be stored in the ViewModel; put it there then display
-        val imageUriExtra = intent.getStringExtra(KEY_IMAGE_URI)
-        viewModel.setImageUri(imageUriExtra)
+        //안드로이드 어플리케이션을 구성하는 네 가지 기본 요소에는 Activity, Service, Broadcast Receiver, Content Provider
+        //화면전환같이 구성요소간 정보 전달 하는 객체
+        val imageUriExtra = intent.getStringExtra(KEY_IMAGE_URI) //확장 데이터를 검색
+        viewModel.setImageUri(imageUriExtra) //화면에서 일단 uri 를 주는 구나
         viewModel.imageUri?.let { imageUri ->
             Glide.with(this).load(imageUri).into(binding.imageView)
-        }
+        } //let 함수를 통해 Glide 에서 받은 uri덮어씌우기
 
         binding.goButton.setOnClickListener { viewModel.applyBlur(blurLevel) }
 
@@ -61,8 +63,9 @@ class BlurActivity : AppCompatActivity() {
         // Hookup the Cancel button
         binding.cancelButton.setOnClickListener { viewModel.cancelWork() }
 
-        viewModel.outputWorkInfo.observe(this, workInfosObserver())
-    }
+        viewModel.outputWorkInfos.observe(this, workInfosObserver())
+    }//LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
+    //workmanager 가 주는
 
     private fun workInfosObserver(): Observer<List<WorkInfo>> {
         return Observer { listOfWorkInfo ->
@@ -80,12 +83,12 @@ class BlurActivity : AppCompatActivity() {
             // Every continuation has only one worker tagged TAG_OUTPUT
             val workInfo = listOfWorkInfo[0]
 
-            if (workInfo.state.isFinished) {
+            if (workInfo.state.isFinished) { //reult.success 를 통해 성공적으로 데이터를 생성하면
                 showWorkFinished()
 
                 // Normally this processing, which is not directly related to drawing views on
                 // screen would be in the ViewModel. For simplicity we are keeping it here.
-                val outputImageUri = workInfo.outputData.getString(KEY_IMAGE_URI)
+                val outputImageUri = workInfo.outputData.getString(KEY_IMAGE_URI) //데이터 객체에서 꺼내기
 
                 // If there is an output file show "See File" button
                 if (!outputImageUri.isNullOrEmpty()) {
@@ -93,6 +96,7 @@ class BlurActivity : AppCompatActivity() {
                     binding.seeFileButton.visibility = View.VISIBLE
                 }
             } else {
+                //계속 상태를 검사하고 있다가 성공이 뜨면 if로
                 showWorkInProgress()
             }
         }

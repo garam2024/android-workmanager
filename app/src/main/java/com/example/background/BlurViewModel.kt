@@ -36,14 +36,14 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
     internal var imageUri: Uri? = null
     internal var outputUri: Uri? = null
-    private val workManager = WorkManager.getInstance(application)
-    internal val outputWorkInfo: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
+    private val workManager = WorkManager.getInstance(application)//뷰모델에서 workmanager 객체 생성
+    internal val outputWorkInfos: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT) //작업목록중에서 특정 태그의 일을 관찰한다
 
     init {
         // This transformation makes sure that whenever the current work Id changes the WorkInfo
         // the UI is listening to changes
     }
-
+    //작업 취소
     internal fun cancelWork() {
         workManager.cancelUniqueWork(IMAGE_MANIPULATION_WORK_NAME)
     }
@@ -52,31 +52,38 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
      * Create the WorkRequest to apply the blur and save the resulting image
      * @param blurLevel The amount to blur the image
      */
+    //뷰모델에서 고유한 작업체인 생성 - 한개의 작업 체인에 여러개의 workrequest 들이 등록되고 교체 된다
     internal fun applyBlur(blurLevel: Int) {
         // Add WorkRequest to Cleanup temporary images
         var continuation = workManager
-                .beginUniqueWork(
-                        IMAGE_MANIPULATION_WORK_NAME,
-                        ExistingWorkPolicy.REPLACE,
-                        OneTimeWorkRequest.from(CleanupWorker::class.java)
+                //일시정지안할거면 beginwith 로??
+                .beginUniqueWork( //작업 요청을 추가할 수 있는 메서드
+                        IMAGE_MANIPULATION_WORK_NAME,  //이 작업 고유의 이름
+                        ExistingWorkPolicy.REPLACE, //이전 작업 정책 - 새작업으로 교체된다
+                        OneTimeWorkRequest.from(CleanupWorker::class.java) //한번만 실행할 workrequest에 corutine worker 로 생성된 클래스를 준다
+                //  return new OneTimeWorkRequest.Builder(workerClass).build();
                 )
 
         // Add WorkRequests to blur the image the number of times requested
         for (i in 0 until blurLevel) {
-            val blurBuilder = OneTimeWorkRequestBuilder<BlurWorker>()
+            val blurBuilder = OneTimeWorkRequestBuilder<BlurWorker>()//OneTimeWorkRequest.Builder(W::class.java)
 
             // Input the Uri if this is the first blur operation
             // After the first blur operation the input will be the output of previous
             // blur operations.
             if (i == 0) {
+                //blur worker 에서 준 uri를 받아서 output 한다
                 val data = workDataOf(KEY_IMAGE_URI to imageUri.toString())
+                //work manager 의 결과물을 데이터 객체로 준다
+                //입력데이터를 작업에 추가 한다
                 blurBuilder.setInputData(data)
             }
 
-            continuation = continuation.then(blurBuilder.build())
+            continuation = continuation.then(blurBuilder.build()) //then - 후자가 적용 되도록 클린워커 -> 블러워커로 교체
         }
 
         // Create charging constraint
+        //Constraints - 작업을 실행시키기 전에 충족시켜야 하는 요구사항
         val constraints = Constraints.Builder()
                 .setRequiresCharging(true)
                 .build()
@@ -88,7 +95,8 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
                 .build()
         continuation = continuation.then(save)
 
-        // Actually start the work
+
+        // Actually start the work 실제 백그라운드 스레드에 작업을 등록시키고 일합니다
         continuation.enqueue()
     }
 

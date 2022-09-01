@@ -31,9 +31,10 @@ import com.example.background.data.ImagesDatabase
 //workmanager 인스턴스를 만들기 위한 파라미터들을 넣어준다
 class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
 
-    override suspend fun doWork(): Result {
+    override suspend fun doWork(): Result {   //doWork : 백그라운드 스레드에서 호출
         //Worker에 인자를 절달한다
         //전달받는 곳? Data 클래스 , 전달방식 : 키-쌍
+        //뷰모델에서 데이터를 주면 여기서 get 해서 작동시키는 구나
         val resourceUri = inputData.getString(KEY_IMAGE_URI) //
         //작업알림을 줍니다? 몇초?
         makeStatusNotification("Blurring image", applicationContext)
@@ -41,10 +42,8 @@ class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
         return try {
             //인자전달여부
             if (resourceUri.isNullOrEmpty()) {
-
                 throw IllegalArgumentException("Invalid input uri")
             }
-
             val outputData = blurAndWriteImageToFile(resourceUri)
             recordImageSaved(resourceUri)
             //성공 결과는 Data 클래스를 통해 반환
@@ -59,7 +58,7 @@ class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
         val imageDao = ImagesDatabase.getDatabase(applicationContext).blurredImageDao()
         imageDao.insert(BlurredImage(resourceUri))
     }
-
+    //데이터 입력 객체 만들기
     private fun blurAndWriteImageToFile(resourceUri: String): Data {
         //데이터 읽기
         val resolver = applicationContext.contentResolver

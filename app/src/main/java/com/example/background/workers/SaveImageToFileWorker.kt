@@ -44,11 +44,11 @@ class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : Worker(ctx
         // Makes a notification when the work starts and slows down the work so that
         // it's easier to see each WorkRequest start, even on emulated devices
         makeStatusNotification("Saving image", applicationContext)
-       // sleep()
+        sleep()
 
         val resolver = applicationContext.contentResolver
         return try {
-            val resourceUri = inputData.getString(KEY_IMAGE_URI)
+            val resourceUri = inputData.getString(KEY_IMAGE_URI) //어차피 하나의 체인 안에서는 data 공유 할 수 있나봄
             val bitmap = BitmapFactory.decodeStream(
                     resolver.openInputStream(Uri.parse(resourceUri)))
             val imageUrl = MediaStore.Images.Media.insertImage(

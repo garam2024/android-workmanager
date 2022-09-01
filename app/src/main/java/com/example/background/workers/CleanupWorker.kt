@@ -26,13 +26,14 @@ import java.io.File
 /**
  * Cleans up temporary files generated during blurring process
  */
+//입출력 데이터가 없이 작동함
 class CleanupWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
 
     override fun doWork(): Result {
         // Makes a notification when the work starts and slows down the work so that
         // it's easier to see each WorkRequest start, even on emulated devices
         makeStatusNotification("Cleaning up old temporary files", applicationContext)
-       // sleep()
+        sleep()
 
         return try {
             val outputDirectory = File(applicationContext.filesDir, OUTPUT_PATH)
