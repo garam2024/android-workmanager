@@ -82,7 +82,7 @@ class BlurActivity : AppCompatActivity() {
 
         }
     }
-
+//작업 진행 관찰
     private fun workInfosObserver(): Observer<List<WorkInfo>> {
         return Observer { listOfWorkInfo ->
 
